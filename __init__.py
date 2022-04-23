@@ -3,7 +3,7 @@ from logging import exception
 from flask import Flask
 from flask import request
 from flask import render_template
-
+import pymysql 
 
 class err(Exception):
     def __init__(self):
@@ -25,7 +25,7 @@ def input():
         filename=image.filename
         splitedFilename = filename.split(".")
         now=datetime.now().strftime('%Y%m%d_%H%M%S')
-        imagePATH = "./images/"
+        imagePATH = "/home/ec2-user/FlaskProject/images/"
         finalFileName = now + "." + splitedFilename[1]
         image.save(dst=imagePATH+finalFileName)
     except:
@@ -42,8 +42,23 @@ def input():
 
     except:
         pass
+    
+    
+    now1=datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    db = pymysql.connect(host='ec2-3-101-124-183.us-west-1.compute.amazonaws.com', port=3306, user='root', passwd='1234', db='health', charset='utf8') 
+    cursor = db.cursor()
+    sql = """
+    INSERT INTO datas VALUES('%s',%s,'%s');
+    """ % (now1, weight, imagePATH+finalFileName)
+    cursor.execute(sql)
+    db.commit()
+    db.close()
+    #INSERT INTO datas VALUES('1999-08-22 11:11:11',83.55,'/home/ec2-user/FlaskProject/images/20220423_105411.jpg')
+
 
     return 'hello'
+
+
 
 
 if __name__ == '__main__':
