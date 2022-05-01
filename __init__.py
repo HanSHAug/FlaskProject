@@ -29,7 +29,7 @@ def input():
         filename=image.filename
         splitedFilename = filename.split(".")
         now=datetime.now().strftime('%Y%m%d_%H%M%S')
-        imagePATH = "/home/ec2-user/FlaskProject/images/"
+        imagePATH = "static/img/"
         finalFileName = now + "." + splitedFilename[1]
         image.save(dst=imagePATH+finalFileName)
     except:
