@@ -1,0 +1,74 @@
+<html>
+    <head>
+      <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script type="text/javascript">
+       
+        var  body_data="";
+          $.ajax({
+                type : "GET",            // HTTP method type(GET, POST) 형식이다.
+                url : "/body",  // 컨트롤러에서 대기중인 URL 주소이다.
+                async: false,    
+                success : function(res){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다. 'res'는 응답받은 데이터이다.
+                    // 응답코드 > 0000
+                    // alert(res);
+                    body_data=res
+                },
+                error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
+                    alert("오류 입니다. 관리자에게 연락하세요.")
+                }
+            });
+        // console.log(body_data);
+        var body_json = JSON.parse(body_data);
+        // console.log(body_json)
+
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+        
+        var date_weight_array = [['date','weight']]
+        var body_array = body_json["health_datas"]
+        for (const i in body_array) {
+            body_data = body_array[i] 
+            // console.log(body_data)
+            var raw_data1 = body_data["date"]
+            var raw_data2 = body_data["weight"]
+            // console.log(raw_data1)
+            var date_weight = [raw_data1,raw_data2]
+            // console.log(date_weight)
+            date_weight_array.push(date_weight)
+        }
+         console.log(date_weight_array)
+         
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable(date_weight_array)
+  
+            var options = {
+                title: 'my weight',
+                curveType: 'function',
+                legend: { position: 'bottom' }
+            };
+  
+            var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+            google.visualization.events.addListener(chart, 'select', clickEvent);
+            chart.draw(data, options);
+            function clickEvent(e){
+                var selection = chart.getSelection();
+                var colLabel = data.getColumnLabel(selection[0].column);
+                var mydata = data.getValue(selection[0].row,0);
+                // console.log(body_json["health_datas"][selection[0].row]["image_path"])
+                document.getElementById("image_pane").src = body_json["health_datas"][selection[0].row]["image_path"]
+                // console.log(selection[0].column)
+                // console.log(selection[0].row)
+                // document.getElementById("image_pane").src = "static/img/"+ body_data.getValues(row, 0)
+                // document.getElementById("image_pane").src = "static/img/downloads.png"
+            }
+        }
+        
+      </script>
+    </head>
+    <body>
+      <div id="curve_chart" style="width: 900px; height: 500px"></div>
+      <img src="static/img/20220423_203552.jpg" id="image_pane">
+    </body>
+  </html>
