@@ -1,19 +1,44 @@
-<html>
-    <head>
-    </head>
-
+<!-- <html>
     <body>
-        <!-- <form action = "/input" accept-charset="utf-8" name = "person_info" method = "post"> -->
-            <form action = "/input" method="post" enctype="multipart/form-data" accept-charset="utf-8" name = "person_info">
-            <fieldset style = "width:150">
-                <legend><strong>오늘의 몸</strong></legend>
-                    체중 : <input type = "text" name = "weight"/><br><br>
-                    눈바디 : <input type="file" id="chooseFile" name="chooseFile" accept="image/*" onchange="loadFile(this)">
-            </form>
-                    <input type="submit" value="submit"/>
-            </fieldset>
-        </form>
+        <div class="container">
+            <label for="uname"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" name="uname" required>
+        
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="psw" required>
+        
+            <button type="submit">Login</button>
+          </div>
     </body>
-<html>
+</html> -->
 
-    
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>헬스</title>
+</head>
+<body>
+    {%with messages = get_flashed_messages()%}
+    {%if messages %}  <!-- messages는 리스트 형태로 넘어옵니다. -->
+      <script type="text/javascript"> 
+        alert("{{messages[-1]}}");
+      </script>
+      {%endif%}
+    {%endwith%}
+<form action="/login" method="POST" id="authForm" >
+    <div>
+        <p>
+            <label for="id">아이디&nbsp&nbsp&nbsp</label>
+            <input type="text" id="id" name="id" placeholder="id" required>
+        </p>
+        <p>
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" name="password" placeholder="password" required>
+        </p>
+    </div>
+    <input type="submit" name="sign_in" value="로그인" id="login" style="WIDTH: 183pt"/>
+ 
+</form>
+ 
+</body>
+</html>
